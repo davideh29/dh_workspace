@@ -22,8 +22,10 @@ Format the code using [Black](https://black.readthedocs.io/) before committing:
 black .
 ```
 
-## Gameplay utilities
+## Directory structure
 
-`PieceColor` is an enum representing piece colors. The `Match` class can track a
-chess match for any number of players, storing the current turn, move number and
-captured pieces.
+The package code lives in `src/dh_workspace`. Game logic is implemented under
+`src/dh_workspace/core/` and supporting utilities are found in
+`src/dh_workspace/utils/`. Unit tests are located in the `tests/` directory.
+
+Module-level documentation describes the available classes and functions.

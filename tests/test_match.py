@@ -1,5 +1,5 @@
 from dh_workspace import Chessboard, Match, PieceColor
-from dh_workspace.chessboard import Piece
+from dh_workspace.core.chessboard import Piece
 
 
 def test_match_initial_state():
