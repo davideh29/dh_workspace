@@ -2,7 +2,8 @@
 
 from .placeholder import greet
 from .chessboard import Chessboard
-from .pieces import ChessPiece, Knight, PieceMove
+from .pieces import ChessPiece, Knight, PieceMove, PieceColor
+from .match import Match
 from .config import CONFIG, Config, configure
 from .logger import logger
 
@@ -11,7 +12,9 @@ __all__ = [
     "Chessboard",
     "ChessPiece",
     "PieceMove",
+    "PieceColor",
     "Knight",
+    "Match",
     "CONFIG",
     "Config",
     "configure",

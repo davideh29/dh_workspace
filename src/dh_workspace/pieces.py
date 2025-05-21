@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import List, Tuple
 
 
@@ -18,11 +19,20 @@ from .config import CONFIG
 from .logger import logger
 
 
+class PieceColor(Enum):
+    """Enumeration of chess piece colors."""
+
+    WHITE = "white"
+    BLACK = "black"
+    RED = "red"
+    BLUE = "blue"
+
+
 @dataclass
 class ChessPiece(ABC):
     """Base class for chess pieces."""
 
-    color: str
+    color: PieceColor
 
     @abstractmethod
     def possible_moves(self, row: int, col: int) -> List[PieceMove]:
