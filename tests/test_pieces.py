@@ -1,15 +1,15 @@
 import pytest
 
-from dh_workspace import ChessPiece, Knight, PieceMove
+from dh_workspace import ChessPiece, Knight, PieceMove, PieceColor
 
 
 def test_chesspiece_is_abstract() -> None:
     with pytest.raises(TypeError):
-        ChessPiece("white")
+        ChessPiece(PieceColor.WHITE)  # type: ignore
 
 
 def test_knight_moves_center() -> None:
-    knight = Knight("white")
+    knight = Knight(PieceColor.WHITE)
     moves = knight.possible_moves(4, 4)
     assert len(moves) == 8
     ends = [m.end for m in moves]
@@ -18,7 +18,7 @@ def test_knight_moves_center() -> None:
 
 
 def test_knight_moves_edge() -> None:
-    knight = Knight("black")
+    knight = Knight(PieceColor.BLACK)
     moves = knight.possible_moves(0, 0)
     assert len(moves) == 8
     ends = {m.end for m in moves}
