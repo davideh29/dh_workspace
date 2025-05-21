@@ -10,8 +10,8 @@ Install development dependencies:
 pip install -r requirements.txt
 ```
 
-Run tests with:
+Run tests without installing the package by setting `PYTHONPATH`:
 
 ```bash
-pytest
+PYTHONPATH=src pytest
 ```
