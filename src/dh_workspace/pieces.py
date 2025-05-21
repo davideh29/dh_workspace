@@ -13,6 +13,7 @@ class PieceMove:
     end: Tuple[int, int]
     captures: List[Tuple[int, int]] = field(default_factory=list)
 
+
 from .config import CONFIG
 from .logger import logger
 
@@ -68,4 +69,3 @@ class Knight(ChessPiece):
                 )
             )
         return moves
-
