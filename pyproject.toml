@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dh_workspace"
+version = "0.0.1"
+description = "Placeholder Python package converted from a ROS workspace"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["example"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
