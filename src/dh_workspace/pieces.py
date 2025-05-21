@@ -1,8 +1,17 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Tuple
+
+
+@dataclass
+class PieceMove:
+    """Represents a potential move for a piece."""
+
+    start: Tuple[int, int]
+    end: Tuple[int, int]
+    captures: List[Tuple[int, int]] = field(default_factory=list)
 
 from .config import CONFIG
 from .logger import logger
@@ -15,7 +24,7 @@ class ChessPiece(ABC):
     color: str
 
     @abstractmethod
-    def possible_moves(self, row: int, col: int) -> List[Tuple[int, int]]:
+    def possible_moves(self, row: int, col: int) -> List[PieceMove]:
         """Return a list of possible moves from ``row`` and ``col``."""
 
     def _is_valid(self, row: int, col: int) -> bool:
@@ -28,7 +37,7 @@ class ChessPiece(ABC):
 class Knight(ChessPiece):
     """Concrete ``ChessPiece`` representing a knight."""
 
-    def possible_moves(self, row: int, col: int) -> List[Tuple[int, int]]:
+    def possible_moves(self, row: int, col: int) -> List[PieceMove]:
         deltas = [
             (2, 1),
             (1, 2),
@@ -39,7 +48,7 @@ class Knight(ChessPiece):
             (1, -2),
             (2, -1),
         ]
-        moves: List[Tuple[int, int]] = []
+        moves: List[PieceMove] = []
         for dr, dc in deltas:
             new_row = row + dr
             new_col = col + dc
@@ -51,6 +60,12 @@ class Knight(ChessPiece):
                     new_row,
                     new_col,
                 )
-                moves.append((new_row, new_col))
+            moves.append(
+                PieceMove(
+                    start=(row, col),
+                    end=(new_row, new_col),
+                    captures=[(new_row, new_col)],
+                )
+            )
         return moves
 
