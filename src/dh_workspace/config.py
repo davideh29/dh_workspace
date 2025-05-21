@@ -12,6 +12,7 @@ class Config:
 
 CONFIG = Config()
 
+
 def configure(config: Config) -> None:
     """Set global configuration and update logger level."""
     global CONFIG
@@ -19,4 +20,3 @@ def configure(config: Config) -> None:
     from .logger import logger
 
     logger.setLevel(config.log_level)
-

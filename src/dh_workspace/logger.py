@@ -7,4 +7,3 @@ _handler.setFormatter(_formatter)
 logger.addHandler(_handler)
 logger.setLevel(logging.INFO)
 logger.propagate = False
-

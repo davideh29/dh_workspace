@@ -3,6 +3,7 @@ This repository contains Python source code in the `src/` directory and tests in
 Development workflow:
 - Run `source setup.sh` before running tests.
 - Execute tests with `pytest -q`.
+- Format the code with `black .` before committing.
 
 Style guidelines:
 - Follow PEP 8 with a maximum line length of 88 characters.

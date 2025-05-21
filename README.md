@@ -15,3 +15,9 @@ After running the script, tests can be executed with:
 ```bash
 pytest
 ```
+
+Format the code using [Black](https://black.readthedocs.io/) before committing:
+
+```bash
+black .
+```
