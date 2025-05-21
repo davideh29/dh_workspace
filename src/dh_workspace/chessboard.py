@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 from typing import Optional, Tuple
 
+from .config import CONFIG
+from .logger import logger
+
 
 @dataclass
 class Piece:
@@ -13,10 +16,10 @@ class Piece:
 class Chessboard:
     """Class representing state of a chessboard."""
 
-    BOARD_SIZE = 8
-
     def __init__(self) -> None:
         """Initialize an empty chessboard."""
+        self.BOARD_SIZE = CONFIG.board_size
+        logger.debug("Initializing chessboard with size %s", self.BOARD_SIZE)
         self._board: list[list[Optional[Piece]]] = [
             [None for _ in range(self.BOARD_SIZE)] for _ in range(self.BOARD_SIZE)
         ]

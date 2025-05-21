@@ -4,8 +4,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Tuple
 
-
-BOARD_SIZE = 8
+from .config import CONFIG
+from .logger import logger
 
 
 @dataclass
@@ -20,7 +20,8 @@ class ChessPiece(ABC):
 
     def _is_valid(self, row: int, col: int) -> bool:
         """Return ``True`` if the position is on the board."""
-        return 0 <= row < BOARD_SIZE and 0 <= col < BOARD_SIZE
+        size = CONFIG.board_size
+        return 0 <= row < size and 0 <= col < size
 
 
 @dataclass
@@ -43,5 +44,13 @@ class Knight(ChessPiece):
             new_row = row + dr
             new_col = col + dc
             if self._is_valid(new_row, new_col):
+                logger.debug(
+                    "Knight move valid from (%s, %s) to (%s, %s)",
+                    row,
+                    col,
+                    new_row,
+                    new_col,
+                )
                 moves.append((new_row, new_col))
         return moves
+
