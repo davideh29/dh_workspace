@@ -1,17 +1,17 @@
 # dh_workspace
 
-This repository has been converted into a basic Python package. The code is located under the `src/` directory and can be installed with standard Python tooling.
+This repository is a basic Python package located under the `src/` directory.
 
 ## Development
 
-Install development dependencies:
+Run the setup script to install dependencies and configure the environment:
 
 ```bash
-pip install -r requirements.txt
+source setup.sh
 ```
 
-Run tests without installing the package by setting `PYTHONPATH`:
+After running the script, tests can be executed with:
 
 ```bash
-PYTHONPATH=src pytest
+pytest
 ```
