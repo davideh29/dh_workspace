@@ -1,35 +1,59 @@
 import pytest
 
-from dh_workspace import ChessPiece, Knight, Pawn, PieceMove, PieceColor
+from dh_workspace import ChessPiece, Chessboard, Knight, Pawn, PieceColor
 
 
 def test_chesspiece_is_abstract() -> None:
+    board = Chessboard()
     with pytest.raises(TypeError):
-        ChessPiece(PieceColor.WHITE)  # type: ignore
+        ChessPiece(PieceColor.WHITE, board)  # type: ignore
 
 
 def test_knight_moves_center() -> None:
-    knight = Knight(PieceColor.WHITE)
+    board = Chessboard()
+    knight = Knight(PieceColor.WHITE, board)
     moves = knight.possible_moves(4, 4)
     assert len(moves) == 8
-    ends = [m.end for m in moves]
+    ends = {m.end for m in moves}
     assert (6, 5) in ends
     assert (2, 3) in ends
 
 
-def test_knight_moves_edge() -> None:
-    knight = Knight(PieceColor.BLACK)
-    moves = knight.possible_moves(0, 0)
-    assert len(moves) == 8
+def test_knight_capture() -> None:
+    board = Chessboard()
+    knight = Knight(PieceColor.WHITE, board)
+    board.place_piece(5, 6, "pawn", PieceColor.BLACK)
+    board.place_piece(6, 5, "pawn", PieceColor.WHITE)
+    moves = knight.possible_moves(4, 4)
     ends = {m.end for m in moves}
-    assert (1, 2) in ends
-    assert (-1, -2) in ends
+    assert (6, 5) not in ends
+    assert (5, 6) in ends
+    capture = [m for m in moves if m.end == (5, 6)][0]
+    assert capture.captures == [(5, 6)]
 
 
-def test_pawn_moves() -> None:
-    pawn = Pawn(PieceColor.WHITE)
+def test_pawn_moves_forward() -> None:
+    board = Chessboard()
+    pawn = Pawn(PieceColor.WHITE, board)
+    moves = pawn.possible_moves(4, 4)
+    assert [(3, 4)] == [m.end for m in moves]
+
+
+def test_pawn_capture() -> None:
+    board = Chessboard()
+    pawn = Pawn(PieceColor.WHITE, board)
+    board.place_piece(3, 3, "pawn", PieceColor.BLACK)
     moves = pawn.possible_moves(4, 4)
     ends = {m.end for m in moves}
     assert (3, 4) in ends
     assert (3, 3) in ends
-    assert (3, 5) in ends
+    capture = [m for m in moves if m.end == (3, 3)][0]
+    assert capture.captures == [(3, 3)]
+
+
+def test_pawn_blocked() -> None:
+    board = Chessboard()
+    pawn = Pawn(PieceColor.WHITE, board)
+    board.place_piece(3, 4, "pawn", PieceColor.WHITE)
+    moves = pawn.possible_moves(4, 4)
+    assert moves == []
