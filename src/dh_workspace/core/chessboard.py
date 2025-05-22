@@ -59,3 +59,29 @@ class Chessboard:
         """Return ``True`` if the square is empty."""
         self._validate_position(row, col)
         return self._board[row][col] is None
+
+    def reset_board(self) -> None:
+        """Clear the board and place all standard pieces."""
+        self._board = [
+            [None for _ in range(self.BOARD_WIDTH)] for _ in range(self.BOARD_HEIGHT)
+        ]
+
+        for col in range(self.BOARD_WIDTH):
+            self.place_piece(1, col, PieceType.PAWN, PieceColor.BLACK)
+            self.place_piece(
+                self.BOARD_HEIGHT - 2, col, PieceType.PAWN, PieceColor.WHITE
+            )
+
+        positions = [0, 1, 2, 3, 5, 6, 7]
+        pieces = [
+            PieceType.ROOK,
+            PieceType.KNIGHT,
+            PieceType.BISHOP,
+            PieceType.QUEEN,
+            PieceType.BISHOP,
+            PieceType.KNIGHT,
+            PieceType.ROOK,
+        ]
+        for col, piece in zip(positions, pieces):
+            self.place_piece(0, col, piece, PieceColor.BLACK)
+            self.place_piece(self.BOARD_HEIGHT - 1, col, piece, PieceColor.WHITE)

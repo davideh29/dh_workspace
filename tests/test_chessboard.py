@@ -32,3 +32,14 @@ def test_invalid_position():
         board.place_piece(-1, 0, PieceType.BISHOP, PieceColor.WHITE)
     with pytest.raises(ValueError):
         board.get_piece(8, 0)
+
+
+def test_reset_board() -> None:
+    board = Chessboard()
+    board.reset_board()
+    assert board.get_piece(6, 0) == (PieceType.PAWN, PieceColor.WHITE)
+    assert board.get_piece(1, 7) == (PieceType.PAWN, PieceColor.BLACK)
+    assert board.get_piece(7, 0) == (PieceType.ROOK, PieceColor.WHITE)
+    assert board.get_piece(0, 1) == (PieceType.KNIGHT, PieceColor.BLACK)
+    assert board.get_piece(7, 3) == (PieceType.QUEEN, PieceColor.WHITE)
+    assert board.is_empty(7, 4)
