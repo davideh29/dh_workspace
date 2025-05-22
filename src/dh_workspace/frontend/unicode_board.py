@@ -120,7 +120,8 @@ def draw_board(
             lines.append(mid if not with_coords else f"  {mid}")
     lines.append(bottom if not with_coords else f"  {bottom}")
     if with_coords:
-        lines.append("  " + "   ".join(str(i + 1) for i in range(w)))
+        bottom_range = range(w - 1, -1, -1) if invert else range(w)
+        lines.append("  " + "   ".join(str(i + 1) for i in bottom_range))
     return "\n".join(lines) + "\n"
 
 

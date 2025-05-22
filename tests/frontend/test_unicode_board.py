@@ -3,6 +3,7 @@ from pathlib import Path
 from dh_workspace import (
     Chessboard,
     Match,
+    CONFIG,
     draw_board,
     draw_board_inverted,
     draw_empty_board,
@@ -108,6 +109,72 @@ def test_draw_starting_board_inverted_saves_file() -> None:
     resources_dir = Path(__file__).parents[1] / "resources"
     resources_dir.mkdir(exist_ok=True)
     output_file = resources_dir / "inverted_starting_board.txt"
+    if not output_file.exists():
+        save_board(board_text, output_file)
+    assert output_file.read_text() == board_text
+
+
+def test_draw_starting_board_inverted_with_coords() -> None:
+    """Regression test for inverted starting board with coordinates."""
+
+    board = Chessboard()
+    board.reset_board()
+    board_text = draw_board_inverted(board, with_coords=True)
+    resources_dir = Path(__file__).parents[1] / "resources"
+    resources_dir.mkdir(exist_ok=True)
+    output_file = resources_dir / "inverted_starting_board_coords.txt"
+    if not output_file.exists():
+        save_board(board_text, output_file)
+    assert output_file.read_text() == board_text
+
+
+def test_inverted_board_after_several_moves() -> None:
+    """Regression test for an inverted board after multiple moves."""
+
+    board = Chessboard()
+    board.reset_board()
+    match = Match(board, num_players=2)
+
+    moves = [
+        ((6, 4), (5, 4)),
+        ((1, 3), (2, 3)),
+        ((6, 0), (5, 0)),
+        ((1, 0), (2, 0)),
+        ((7, 1), (5, 2)),
+        ((0, 1), (2, 2)),
+        ((7, 6), (5, 5)),
+        ((0, 6), (2, 5)),
+    ]
+
+    for start, end in moves:
+        assert match.attempt_move(start, end)
+
+    board_text = draw_board_inverted(board, with_coords=True)
+    resources_dir = Path(__file__).parents[1] / "resources"
+    resources_dir.mkdir(exist_ok=True)
+    output_file = resources_dir / "inverted_moves.txt"
+    if not output_file.exists():
+        save_board(board_text, output_file)
+    assert output_file.read_text() == board_text
+
+
+def test_draw_non_standard_size_board() -> None:
+    """Regression test for drawing a smaller board."""
+
+    old_w, old_h = CONFIG.board_width, CONFIG.board_height
+    CONFIG.board_width = 5
+    CONFIG.board_height = 4
+    try:
+        board = Chessboard()
+        board.reset_board()
+        board_text = draw_board(board, with_coords=True)
+    finally:
+        CONFIG.board_width = old_w
+        CONFIG.board_height = old_h
+
+    resources_dir = Path(__file__).parents[1] / "resources"
+    resources_dir.mkdir(exist_ok=True)
+    output_file = resources_dir / "non_standard_board.txt"
     if not output_file.exists():
         save_board(board_text, output_file)
     assert output_file.read_text() == board_text
