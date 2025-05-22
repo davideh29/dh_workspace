@@ -41,6 +41,7 @@ class PieceType(Enum):
     BISHOP = "bishop"
     ROOK = "rook"
     QUEEN = "queen"
+    KING = "king"
 
 
 from .moves import generate_moves
@@ -102,3 +103,11 @@ class Queen(ChessPiece):
 
     def possible_moves(self, row: int, col: int) -> List[PieceMove]:
         return generate_moves(PieceType.QUEEN, self.board, self.color, row, col)
+
+
+@dataclass
+class King(ChessPiece):
+    """Concrete ``ChessPiece`` representing a king."""
+
+    def possible_moves(self, row: int, col: int) -> List[PieceMove]:
+        return generate_moves(PieceType.KING, self.board, self.color, row, col)

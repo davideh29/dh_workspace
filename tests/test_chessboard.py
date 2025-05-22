@@ -42,4 +42,5 @@ def test_reset_board() -> None:
     assert board.get_piece(7, 0) == (PieceType.ROOK, PieceColor.WHITE)
     assert board.get_piece(0, 1) == (PieceType.KNIGHT, PieceColor.BLACK)
     assert board.get_piece(7, 3) == (PieceType.QUEEN, PieceColor.WHITE)
-    assert board.is_empty(7, 4)
+    assert board.get_piece(7, 4) == (PieceType.KING, PieceColor.WHITE)
+    assert board.get_piece(0, 4) == (PieceType.KING, PieceColor.BLACK)
