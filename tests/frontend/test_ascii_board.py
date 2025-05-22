@@ -23,3 +23,10 @@ def test_draw_starting_board_saves_file(tmp_path: Path) -> None:
     output_file = resources_dir / "starting_board.txt"
     save_board(board_text, output_file)
     assert output_file.read_text() == board_text
+
+
+def test_unicode_board_structure() -> None:
+    """Verify that ``draw_empty_board`` uses box drawing characters."""
+
+    expected = "┏━━━┳━━━┓\n" "┃   ┃   ┃\n" "┣━━━╋━━━┫\n" "┃   ┃   ┃\n" "┗━━━┻━━━┛"
+    assert draw_empty_board(width=2, height=2) == expected
