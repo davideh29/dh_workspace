@@ -15,8 +15,13 @@ class PieceMove:
     captures: List[Tuple[int, int]] = field(default_factory=list)
 
 
+from typing import TYPE_CHECKING
+
 from ..utils.config import CONFIG
 from ..utils.logger import logger
+
+if TYPE_CHECKING:  # pragma: no cover - only for type hints
+    from .chessboard import Chessboard
 
 
 class PieceColor(Enum):
@@ -33,6 +38,7 @@ class ChessPiece(ABC):
     """Base class for chess pieces."""
 
     color: PieceColor
+    board: "Chessboard"
 
     @abstractmethod
     def possible_moves(self, row: int, col: int) -> List[PieceMove]:
@@ -61,10 +67,14 @@ class Knight(ChessPiece):
             (2, -1),
         ]
         moves: List[PieceMove] = []
-        for dr, dc in deltas:
-            new_row = row + dr
-            new_col = col + dc
-            if self._is_valid(new_row, new_col):
+        for delta_row, delta_col in deltas:
+            new_row = row + delta_row
+            new_col = col + delta_col
+            if not self._is_valid(new_row, new_col):
+                continue
+
+            piece = self.board.get_piece(new_row, new_col)
+            if piece is None:
                 logger.debug(
                     "Knight move valid from (%s, %s) to (%s, %s)",
                     row,
@@ -72,38 +82,10 @@ class Knight(ChessPiece):
                     new_row,
                     new_col,
                 )
-            moves.append(
-                PieceMove(
-                    start=(row, col),
-                    end=(new_row, new_col),
-                    captures=[(new_row, new_col)],
-                )
-            )
-        return moves
-
-
-@dataclass
-class Pawn(ChessPiece):
-    """Concrete ``ChessPiece`` representing a pawn."""
-
-    def possible_moves(self, row: int, col: int) -> List[PieceMove]:
-        direction = -1 if self.color == PieceColor.WHITE else 1
-        new_row = row + direction
-        moves: List[PieceMove] = []
-        if self._is_valid(new_row, col):
-            logger.debug(
-                "Pawn move valid from (%s, %s) to (%s, %s)",
-                row,
-                col,
-                new_row,
-                col,
-            )
-            moves.append(PieceMove(start=(row, col), end=(new_row, col)))
-        for dc in (-1, 1):
-            new_col = col + dc
-            if self._is_valid(new_row, new_col):
+                moves.append(PieceMove(start=(row, col), end=(new_row, new_col)))
+            elif piece[1] != self.color:
                 logger.debug(
-                    "Pawn capture from (%s, %s) to (%s, %s)",
+                    "Knight capture from (%s, %s) to (%s, %s)",
                     row,
                     col,
                     new_row,
@@ -116,4 +98,49 @@ class Pawn(ChessPiece):
                         captures=[(new_row, new_col)],
                     )
                 )
+        return moves
+
+
+@dataclass
+class Pawn(ChessPiece):
+    """Concrete ``ChessPiece`` representing a pawn."""
+
+    def possible_moves(self, row: int, col: int) -> List[PieceMove]:
+        direction = -1 if self.color == PieceColor.WHITE else 1
+        target_row = row + direction
+        candidate_moves = [(0, False), (-1, True), (1, True)]
+        moves: List[PieceMove] = []
+
+        for delta_col, is_capture in candidate_moves:
+            new_col = col + delta_col
+            if not self._is_valid(target_row, new_col):
+                continue
+
+            piece = self.board.get_piece(target_row, new_col)
+            if is_capture:
+                if piece is not None and piece[1] != self.color:
+                    logger.debug(
+                        "Pawn capture from (%s, %s) to (%s, %s)",
+                        row,
+                        col,
+                        target_row,
+                        new_col,
+                    )
+                    moves.append(
+                        PieceMove(
+                            start=(row, col),
+                            end=(target_row, new_col),
+                            captures=[(target_row, new_col)],
+                        )
+                    )
+            else:
+                if piece is None:
+                    logger.debug(
+                        "Pawn move valid from (%s, %s) to (%s, %s)",
+                        row,
+                        col,
+                        target_row,
+                        new_col,
+                    )
+                    moves.append(PieceMove(start=(row, col), end=(target_row, new_col)))
         return moves
