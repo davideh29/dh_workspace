@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import List, Tuple, TYPE_CHECKING
 
 from .pieces import PieceMove, PieceColor, PieceType
-from ..utils.logger import logger
+from ...utils.logger import logger
 
 if TYPE_CHECKING:  # pragma: no cover - only for type hints
     from .chessboard import Chessboard
