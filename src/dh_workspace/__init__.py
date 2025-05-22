@@ -8,6 +8,8 @@ from .core.pieces import (
     Pawn,
     Bishop,
     Rook,
+    Queen,
+    PieceType,
     PieceMove,
     PieceColor,
 )
@@ -25,6 +27,8 @@ __all__ = [
     "Pawn",
     "Bishop",
     "Rook",
+    "Queen",
+    "PieceType",
     "Match",
     "CONFIG",
     "Config",

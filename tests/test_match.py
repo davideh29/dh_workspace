@@ -1,4 +1,4 @@
-from dh_workspace import Chessboard, Match, PieceColor
+from dh_workspace import Chessboard, Match, PieceColor, PieceType
 from dh_workspace.core.chessboard import Piece
 
 
@@ -12,7 +12,7 @@ def test_match_initial_state():
 
 def test_match_turn_and_capture():
     match = Match(Chessboard(), num_players=2)
-    piece = Piece("pawn", PieceColor.WHITE)
+    piece = Piece(PieceType.PAWN, PieceColor.WHITE)
     match.capture_piece(0, piece)
     match.next_turn()
     assert match.current_turn == 1
