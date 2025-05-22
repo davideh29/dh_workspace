@@ -39,18 +39,19 @@ def draw_empty_board(
     bottom = "┗" + "┻".join(_H_SEG for _ in range(w)) + "┛"
 
     lines: list[str] = [top if not with_coords else f"  {top}"]
-    for row in range(h):
+    for idx in range(h):
         row_line = "┃" + "┃".join(_EMPTY_CELL for _ in range(w)) + "┃"
         if with_coords:
-            lines.append(f"{row + 1} {row_line}")
+            label = h - idx
+            lines.append(f"{label} {row_line}")
         else:
             lines.append(row_line)
-        if row < h - 1:
+        if idx < h - 1:
             lines.append(mid if not with_coords else f"  {mid}")
     lines.append(bottom if not with_coords else f"  {bottom}")
     if with_coords:
         coords = "   ".join(index_to_letters(i + 1) for i in range(w))
-        lines.append(f"  {coords}")
+        lines.append(f"   {coords}")
     return "\n".join(lines) + "\n"
 
 
@@ -115,7 +116,8 @@ def draw_board(
                 cells.append(f" {char} ")
         row_line = "┃" + "┃".join(cells) + "┃"
         if with_coords:
-            lines.append(f"{idx + 1} {row_line}")
+            label = idx + 1 if invert else h - idx
+            lines.append(f"{label} {row_line}")
         else:
             lines.append(row_line)
         if idx < h - 1:
@@ -124,7 +126,7 @@ def draw_board(
     if with_coords:
         bottom_range = range(w - 1, -1, -1) if invert else range(w)
         coords = "   ".join(index_to_letters(i + 1) for i in bottom_range)
-        lines.append(f"  {coords}")
+        lines.append(f"   {coords}")
     return "\n".join(lines) + "\n"
 
 
