@@ -1,6 +1,6 @@
 import pytest
 
-from dh_workspace import ChessPiece, Chessboard, Knight, Pawn, PieceColor
+from dh_workspace import ChessPiece, Chessboard, Knight, Pawn, Bishop, PieceColor
 
 
 def test_chesspiece_is_abstract() -> None:
@@ -57,3 +57,26 @@ def test_pawn_blocked() -> None:
     board.place_piece(3, 4, "pawn", PieceColor.WHITE)
     moves = pawn.possible_moves(4, 4)
     assert moves == []
+
+
+def test_bishop_moves_diagonally() -> None:
+    board = Chessboard()
+    bishop = Bishop(PieceColor.WHITE, board)
+    moves = bishop.possible_moves(4, 4)
+    assert len(moves) == 13
+    ends = {m.end for m in moves}
+    assert (0, 0) in ends
+    assert (7, 7) in ends
+    assert (3, 5) in ends
+
+
+def test_bishop_capture_and_block() -> None:
+    board = Chessboard()
+    bishop = Bishop(PieceColor.WHITE, board)
+    board.place_piece(6, 6, "pawn", PieceColor.BLACK)
+    board.place_piece(2, 2, "pawn", PieceColor.WHITE)
+    moves = bishop.possible_moves(4, 4)
+    ends = {m.end for m in moves}
+    assert (6, 6) in ends
+    assert (7, 7) not in ends
+    assert (2, 2) not in ends
