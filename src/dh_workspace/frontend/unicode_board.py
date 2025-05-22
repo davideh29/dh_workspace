@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from ..utils.config import CONFIG
+from ..core.utils import index_to_letters
 
 
 _H_SEG = "━" * 3
@@ -26,8 +27,8 @@ def draw_empty_board(
     height:
         Optional board height. Defaults to ``CONFIG.board_height``.
     with_coords:
-        If ``True``, include numeric coordinates along the left and bottom
-        edges of the board.
+        If ``True``, include numeric coordinates along the left edge and
+        alphabetical coordinates along the bottom of the board.
     """
 
     w = width or CONFIG.board_width
@@ -48,7 +49,8 @@ def draw_empty_board(
             lines.append(mid if not with_coords else f"  {mid}")
     lines.append(bottom if not with_coords else f"  {bottom}")
     if with_coords:
-        lines.append("  " + "   ".join(str(i + 1) for i in range(w)))
+        coords = "   ".join(index_to_letters(i + 1) for i in range(w))
+        lines.append(f"  {coords}")
     return "\n".join(lines) + "\n"
 
 
@@ -62,8 +64,8 @@ def draw_board(
     board:
         The ``Chessboard`` instance to render.
     with_coords:
-        If ``True``, include numeric coordinates along the left and bottom
-        edges of the board.
+        If ``True``, include numeric coordinates along the left edge and
+        alphabetical coordinates along the bottom of the board.
     invert:
         If ``True``, draw the board upside down. Useful when switching the
         player's perspective.
@@ -121,7 +123,8 @@ def draw_board(
     lines.append(bottom if not with_coords else f"  {bottom}")
     if with_coords:
         bottom_range = range(w - 1, -1, -1) if invert else range(w)
-        lines.append("  " + "   ".join(str(i + 1) for i in bottom_range))
+        coords = "   ".join(index_to_letters(i + 1) for i in bottom_range)
+        lines.append(f"  {coords}")
     return "\n".join(lines) + "\n"
 
 
