@@ -6,7 +6,8 @@ import logging
 class Config:
     """Configuration for the package."""
 
-    board_size: int = 8
+    board_width: int = 8
+    board_height: int = 8
     log_level: int = logging.INFO
 
 

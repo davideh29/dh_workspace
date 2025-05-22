@@ -19,15 +19,20 @@ class Chessboard:
 
     def __init__(self) -> None:
         """Initialize an empty chessboard."""
-        self.BOARD_SIZE = CONFIG.board_size
-        logger.debug("Initializing chessboard with size %s", self.BOARD_SIZE)
+        self.BOARD_WIDTH = CONFIG.board_width
+        self.BOARD_HEIGHT = CONFIG.board_height
+        logger.debug(
+            "Initializing chessboard with width %s and height %s",
+            self.BOARD_WIDTH,
+            self.BOARD_HEIGHT,
+        )
         self._board: list[list[Optional[Piece]]] = [
-            [None for _ in range(self.BOARD_SIZE)] for _ in range(self.BOARD_SIZE)
+            [None for _ in range(self.BOARD_WIDTH)] for _ in range(self.BOARD_HEIGHT)
         ]
 
     def _validate_position(self, row: int, col: int) -> None:
         """Raise ``ValueError`` if ``row`` or ``col`` is outside the board."""
-        if not (0 <= row < self.BOARD_SIZE and 0 <= col < self.BOARD_SIZE):
+        if not (0 <= row < self.BOARD_HEIGHT and 0 <= col < self.BOARD_WIDTH):
             raise ValueError("Position out of bounds")
 
     def place_piece(self, row: int, col: int, piece: str, color: PieceColor) -> None:
