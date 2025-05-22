@@ -7,23 +7,32 @@ from pathlib import Path
 from ..utils.config import CONFIG
 
 
+_H_SEG = "━" * 3
+_EMPTY_CELL = " " * 3
+
+
 def draw_empty_board(width: int | None = None, height: int | None = None) -> str:
-    """Return a simple ASCII representation of an empty chessboard."""
+    """Return a Unicode board with empty squares."""
+
     w = width or CONFIG.board_width
     h = height or CONFIG.board_height
 
-    # The top border should align with the left edge of the board
-    # so we avoid introducing a leading space.
-    top_border = "_" + " _" * (w - 1)
-    lines = [top_border]
-    for _ in range(h):
-        line = "|" + "_|" * w
-        lines.append(line)
+    top = "┏" + "┳".join(_H_SEG for _ in range(w)) + "┓"
+    mid = "┣" + "╋".join(_H_SEG for _ in range(w)) + "┫"
+    bottom = "┗" + "┻".join(_H_SEG for _ in range(w)) + "┛"
+
+    lines = [top]
+    for row in range(h):
+        lines.append("┃" + "┃".join(_EMPTY_CELL for _ in range(w)) + "┃")
+        if row < h - 1:
+            lines.append(mid)
+    lines.append(bottom)
     return "\n".join(lines)
 
 
 def draw_board(board: "Chessboard") -> str:
-    """Return a Unicode representation of ``board``."""
+    """Return a Unicode chessboard containing the pieces from ``board``."""
+
     from ..core.backend.pieces import PieceColor, PieceType
 
     unicode_map = {
@@ -47,19 +56,26 @@ def draw_board(board: "Chessboard") -> str:
 
     w = board.BOARD_WIDTH
     h = board.BOARD_HEIGHT
-    lines = ["_" + " _" * (w - 1)]
+
+    top = "┏" + "┳".join(_H_SEG for _ in range(w)) + "┓"
+    mid = "┣" + "╋".join(_H_SEG for _ in range(w)) + "┫"
+    bottom = "┗" + "┻".join(_H_SEG for _ in range(w)) + "┛"
+
+    lines = [top]
     for row in range(h):
         cells = []
         for col in range(w):
             piece = board.get_piece(row, col)
             if piece is None:
-                cells.append("_")
-                continue
-            p_type, p_color = piece
-            char = unicode_map.get(p_color, {}).get(p_type, "?")
-            cells.append(char)
-        line = "|" + "|".join(cells) + "|"
-        lines.append(line)
+                cells.append(_EMPTY_CELL)
+            else:
+                p_type, p_color = piece
+                char = unicode_map.get(p_color, {}).get(p_type, "?")
+                cells.append(f" {char} ")
+        lines.append("┃" + "┃".join(cells) + "┃")
+        if row < h - 1:
+            lines.append(mid)
+    lines.append(bottom)
     return "\n".join(lines)
 
 
