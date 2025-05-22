@@ -178,3 +178,37 @@ class Bishop(ChessPiece):
                 step += 1
 
         return moves
+
+
+@dataclass
+class Rook(ChessPiece):
+    """Concrete ``ChessPiece`` representing a rook."""
+
+    def possible_moves(self, row: int, col: int) -> List[PieceMove]:
+        moves: List[PieceMove] = []
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+        for delta_row, delta_col in directions:
+            step = 1
+            while True:
+                new_row = row + delta_row * step
+                new_col = col + delta_col * step
+                if not self._is_valid(new_row, new_col):
+                    break
+
+                piece = self.board.get_piece(new_row, new_col)
+                if piece is None:
+                    moves.append(PieceMove(start=(row, col), end=(new_row, new_col)))
+                else:
+                    if piece[1] != self.color:
+                        moves.append(
+                            PieceMove(
+                                start=(row, col),
+                                end=(new_row, new_col),
+                                captures=[(new_row, new_col)],
+                            )
+                        )
+                    break
+                step += 1
+
+        return moves

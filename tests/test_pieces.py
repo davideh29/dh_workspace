@@ -1,6 +1,14 @@
 import pytest
 
-from dh_workspace import ChessPiece, Chessboard, Knight, Pawn, Bishop, PieceColor
+from dh_workspace import (
+    ChessPiece,
+    Chessboard,
+    Knight,
+    Pawn,
+    Bishop,
+    Rook,
+    PieceColor,
+)
 
 
 def test_chesspiece_is_abstract() -> None:
@@ -80,3 +88,35 @@ def test_bishop_capture_and_block() -> None:
     assert (6, 6) in ends
     assert (7, 7) not in ends
     assert (2, 2) not in ends
+
+
+def test_rook_moves_straight() -> None:
+    board = Chessboard()
+    rook = Rook(PieceColor.WHITE, board)
+    moves = rook.possible_moves(4, 4)
+    assert len(moves) == 14
+    ends = {m.end for m in moves}
+    assert (0, 4) in ends
+    assert (7, 4) in ends
+    assert (4, 0) in ends
+    assert (4, 7) in ends
+
+
+def test_rook_capture_and_block() -> None:
+    board = Chessboard()
+    rook = Rook(PieceColor.WHITE, board)
+    board.place_piece(4, 6, "pawn", PieceColor.BLACK)
+    board.place_piece(1, 4, "pawn", PieceColor.BLACK)
+    board.place_piece(4, 2, "pawn", PieceColor.WHITE)
+    moves = rook.possible_moves(4, 4)
+    ends = {m.end for m in moves}
+    assert (4, 6) in ends
+    assert (1, 4) in ends
+    assert (4, 7) not in ends
+    assert (0, 4) not in ends
+    assert (4, 2) not in ends
+    assert (4, 1) not in ends
+    capture1 = [m for m in moves if m.end == (4, 6)][0]
+    capture2 = [m for m in moves if m.end == (1, 4)][0]
+    assert capture1.captures == [(4, 6)]
+    assert capture2.captures == [(1, 4)]
