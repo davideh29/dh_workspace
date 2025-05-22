@@ -1,6 +1,6 @@
 import pytest
 
-from dh_workspace import ChessPiece, Knight, PieceMove, PieceColor
+from dh_workspace import ChessPiece, Knight, Pawn, PieceMove, PieceColor
 
 
 def test_chesspiece_is_abstract() -> None:
@@ -24,3 +24,12 @@ def test_knight_moves_edge() -> None:
     ends = {m.end for m in moves}
     assert (1, 2) in ends
     assert (-1, -2) in ends
+
+
+def test_pawn_moves() -> None:
+    pawn = Pawn(PieceColor.WHITE)
+    moves = pawn.possible_moves(4, 4)
+    ends = {m.end for m in moves}
+    assert (3, 4) in ends
+    assert (3, 3) in ends
+    assert (3, 5) in ends

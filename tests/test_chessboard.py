@@ -5,8 +5,8 @@ from dh_workspace import Chessboard, PieceColor
 
 def test_board_initially_empty():
     board = Chessboard()
-    for row in range(board.BOARD_SIZE):
-        for col in range(board.BOARD_SIZE):
+    for row in range(board.BOARD_HEIGHT):
+        for col in range(board.BOARD_WIDTH):
             assert board.is_empty(row, col)
             assert board.get_piece(row, col) is None
 
