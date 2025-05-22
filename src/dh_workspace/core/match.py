@@ -10,6 +10,7 @@ from .pieces import (
     Pawn,
     Queen,
     Rook,
+    King,
     PieceType,
 )
 
@@ -51,6 +52,7 @@ class Match:
             PieceType.BISHOP: Bishop,
             PieceType.ROOK: Rook,
             PieceType.QUEEN: Queen,
+            PieceType.KING: King,
         }
         piece_cls = piece_map.get(piece_type)
         if piece_cls is None:

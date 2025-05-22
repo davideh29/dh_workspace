@@ -180,6 +180,40 @@ def generate_queen_moves(
     )
 
 
+def generate_king_moves(
+    board: "Chessboard", color: PieceColor, row: int, col: int
+) -> List[PieceMove]:
+    """Return all legal king moves from ``row`` and ``col``."""
+    directions = [
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
+        (0, -1),
+        (0, 1),
+        (1, -1),
+        (1, 0),
+        (1, 1),
+    ]
+    moves: List[PieceMove] = []
+    for d_row, d_col in directions:
+        new_row = row + d_row
+        new_col = col + d_col
+        if not _is_valid(board, new_row, new_col):
+            continue
+        piece = board.get_piece(new_row, new_col)
+        if piece is None:
+            moves.append(PieceMove(start=(row, col), end=(new_row, new_col)))
+        elif piece[1] != color:
+            moves.append(
+                PieceMove(
+                    start=(row, col),
+                    end=(new_row, new_col),
+                    captures=[(new_row, new_col)],
+                )
+            )
+    return moves
+
+
 def generate_moves(
     piece: PieceType,
     board: "Chessboard",
@@ -198,4 +232,6 @@ def generate_moves(
         return generate_rook_moves(board, color, row, col)
     if piece == PieceType.QUEEN:
         return generate_queen_moves(board, color, row, col)
+    if piece == PieceType.KING:
+        return generate_king_moves(board, color, row, col)
     raise ValueError(f"Unsupported piece type: {piece}")

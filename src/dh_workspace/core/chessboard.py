@@ -72,16 +72,18 @@ class Chessboard:
                 self.BOARD_HEIGHT - 2, col, PieceType.PAWN, PieceColor.WHITE
             )
 
-        positions = [0, 1, 2, 3, 5, 6, 7]
         pieces = [
             PieceType.ROOK,
             PieceType.KNIGHT,
             PieceType.BISHOP,
             PieceType.QUEEN,
+            PieceType.KING,
             PieceType.BISHOP,
             PieceType.KNIGHT,
             PieceType.ROOK,
         ]
-        for col, piece in zip(positions, pieces):
+        for col, piece in enumerate(pieces):
+            if col >= self.BOARD_WIDTH:
+                break
             self.place_piece(0, col, piece, PieceColor.BLACK)
             self.place_piece(self.BOARD_HEIGHT - 1, col, piece, PieceColor.WHITE)

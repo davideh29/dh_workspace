@@ -8,6 +8,7 @@ from dh_workspace import (
     Bishop,
     Rook,
     Queen,
+    King,
     PieceColor,
     PieceType,
 )
@@ -155,3 +156,34 @@ def test_queen_capture_and_block() -> None:
     capture2 = [m for m in moves if m.end == (6, 6)][0]
     assert capture1.captures == [(4, 6)]
     assert capture2.captures == [(6, 6)]
+
+
+def test_king_moves_all_directions() -> None:
+    board = Chessboard()
+    king = King(PieceColor.WHITE, board)
+    moves = king.possible_moves(4, 4)
+    ends = {m.end for m in moves}
+    expected = {
+        (3, 3),
+        (3, 4),
+        (3, 5),
+        (4, 3),
+        (4, 5),
+        (5, 3),
+        (5, 4),
+        (5, 5),
+    }
+    assert ends == expected
+
+
+def test_king_capture_and_block() -> None:
+    board = Chessboard()
+    king = King(PieceColor.WHITE, board)
+    board.place_piece(3, 3, PieceType.PAWN, PieceColor.BLACK)
+    board.place_piece(4, 5, PieceType.PAWN, PieceColor.WHITE)
+    moves = king.possible_moves(4, 4)
+    ends = {m.end for m in moves}
+    assert (3, 3) in ends
+    assert (4, 5) not in ends
+    capture = [m for m in moves if m.end == (3, 3)][0]
+    assert capture.captures == [(3, 3)]
