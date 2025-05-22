@@ -34,6 +34,20 @@ def test_draw_starting_board_saves_file() -> None:
     assert output_file.read_text() == board_text
 
 
+def test_draw_starting_board_with_coords() -> None:
+    """Ensure drawing the numbered starting board matches the stored resource."""
+
+    chessboard = Chessboard()
+    chessboard.reset_board()
+    board_text = draw_board(chessboard, with_coords=True)
+    resources_dir = Path(__file__).parents[1] / "resources"
+    resources_dir.mkdir(exist_ok=True)
+    output_file = resources_dir / "starting_board_coords.txt"
+    if not output_file.exists():
+        save_board(board_text, output_file)
+    assert output_file.read_text() == board_text
+
+
 def test_unicode_board_structure() -> None:
     """Verify that ``draw_empty_board`` uses box drawing characters."""
 
@@ -83,3 +97,17 @@ def test_draw_board_inverted() -> None:
     top_row = draw_board_inverted(board).splitlines()[1]
     assert "♖" in top_row
     assert "♜" not in top_row
+
+
+def test_draw_starting_board_inverted_saves_file() -> None:
+    """Regression test for the full inverted starting board."""
+
+    board = Chessboard()
+    board.reset_board()
+    board_text = draw_board_inverted(board)
+    resources_dir = Path(__file__).parents[1] / "resources"
+    resources_dir.mkdir(exist_ok=True)
+    output_file = resources_dir / "inverted_starting_board.txt"
+    if not output_file.exists():
+        save_board(board_text, output_file)
+    assert output_file.read_text() == board_text
