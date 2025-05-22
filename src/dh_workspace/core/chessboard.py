@@ -3,14 +3,14 @@ from typing import Optional, Tuple
 
 from ..utils.config import CONFIG
 from ..utils.logger import logger
-from .pieces import PieceColor
+from .pieces import PieceColor, PieceType
 
 
 @dataclass
 class Piece:
     """Represents a chess piece and its color."""
 
-    piece: str
+    piece: PieceType
     color: PieceColor
 
 
@@ -35,7 +35,9 @@ class Chessboard:
         if not (0 <= row < self.BOARD_HEIGHT and 0 <= col < self.BOARD_WIDTH):
             raise ValueError("Position out of bounds")
 
-    def place_piece(self, row: int, col: int, piece: str, color: PieceColor) -> None:
+    def place_piece(
+        self, row: int, col: int, piece: PieceType, color: PieceColor
+    ) -> None:
         """Place a piece at the given position."""
         self._validate_position(row, col)
         self._board[row][col] = Piece(piece, color)
@@ -45,7 +47,7 @@ class Chessboard:
         self._validate_position(row, col)
         self._board[row][col] = None
 
-    def get_piece(self, row: int, col: int) -> Optional[Tuple[str, PieceColor]]:
+    def get_piece(self, row: int, col: int) -> Optional[Tuple[PieceType, PieceColor]]:
         """Return the piece and color at the given position, or ``None`` if empty."""
         self._validate_position(row, col)
         data = self._board[row][col]
