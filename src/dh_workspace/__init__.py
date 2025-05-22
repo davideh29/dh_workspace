@@ -1,7 +1,7 @@
 """dh_workspace package initialization."""
 
-from .core.chessboard import Chessboard
-from .core.pieces import (
+from .core.backend.chessboard import Chessboard
+from .core.backend.pieces import (
     ChessPiece,
     Knight,
     Pawn,
@@ -13,7 +13,7 @@ from .core.pieces import (
     PieceMove,
     PieceColor,
 )
-from .core.match import Match
+from .core.backend.match import Match
 from .utils.config import CONFIG, Config, configure
 from .utils.logger import logger
 

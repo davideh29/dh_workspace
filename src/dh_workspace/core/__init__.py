@@ -1,6 +1,8 @@
-from .chessboard import Chessboard, Piece
-from .match import Match
-from .pieces import ChessPiece, Knight, PieceMove, PieceColor
+"""Core backend exports."""
+
+from .backend.chessboard import Chessboard, Piece
+from .backend.match import Match
+from .backend.pieces import ChessPiece, Knight, PieceMove, PieceColor
 
 __all__ = [
     "Chessboard",

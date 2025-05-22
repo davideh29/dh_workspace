@@ -10,7 +10,7 @@ from dh_workspace import (
     Queen,
     Rook,
 )
-from dh_workspace.core.chessboard import Piece
+from dh_workspace.core.backend.chessboard import Piece
 
 
 def test_pawn_capture_sequence() -> None:

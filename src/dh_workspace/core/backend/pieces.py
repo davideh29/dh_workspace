@@ -17,7 +17,7 @@ class PieceMove:
 
 from typing import TYPE_CHECKING
 
-from ..utils.config import CONFIG
+from ...utils.config import CONFIG
 
 
 if TYPE_CHECKING:  # pragma: no cover - only for type hints

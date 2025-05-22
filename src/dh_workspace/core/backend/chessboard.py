@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Optional, Tuple
 
-from ..utils.config import CONFIG
-from ..utils.logger import logger
+from ...utils.config import CONFIG
+from ...utils.logger import logger
 from .pieces import PieceColor, PieceType
 
 
