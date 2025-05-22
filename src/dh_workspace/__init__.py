@@ -16,6 +16,7 @@ from .core.backend.pieces import (
 from .core.backend.match import Match
 from .utils.config import CONFIG, Config, configure
 from .utils.logger import logger
+from .frontend.ascii_board import draw_empty_board, save_board
 
 __all__ = [
     "Chessboard",
@@ -34,4 +35,6 @@ __all__ = [
     "Config",
     "configure",
     "logger",
+    "draw_empty_board",
+    "save_board",
 ]
