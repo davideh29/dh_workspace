@@ -187,3 +187,23 @@ def test_king_capture_and_block() -> None:
     assert (4, 5) not in ends
     capture = [m for m in moves if m.end == (3, 3)][0]
     assert capture.captures == [(3, 3)]
+
+
+def test_king_avoids_danger() -> None:
+    board = Chessboard()
+    king = King(PieceColor.WHITE, board)
+    board.place_piece(4, 1, PieceType.ROOK, PieceColor.BLACK)
+    moves = king.possible_moves(4, 4)
+    ends = {m.end for m in moves}
+    assert (4, 3) not in ends
+    assert (5, 4) in ends
+
+
+def test_king_cannot_capture_into_danger() -> None:
+    board = Chessboard()
+    king = King(PieceColor.WHITE, board)
+    board.place_piece(4, 5, PieceType.ROOK, PieceColor.BLACK)
+    board.place_piece(4, 7, PieceType.ROOK, PieceColor.BLACK)
+    moves = king.possible_moves(4, 4)
+    ends = {m.end for m in moves}
+    assert (4, 5) not in ends

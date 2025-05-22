@@ -14,6 +14,38 @@ def _is_valid(board: "Chessboard", row: int, col: int) -> bool:
     return 0 <= row < board.BOARD_HEIGHT and 0 <= col < board.BOARD_WIDTH
 
 
+def _square_under_attack(
+    board: "Chessboard", color: PieceColor, row: int, col: int
+) -> bool:
+    """Return ``True`` if ``row`` and ``col`` are threatened by any enemy piece."""
+    for r in range(board.BOARD_HEIGHT):
+        for c in range(board.BOARD_WIDTH):
+            piece = board.get_piece(r, c)
+            if piece is None:
+                continue
+            piece_type, piece_color = piece
+            if piece_color == color:
+                continue
+            if piece_type == PieceType.KNIGHT:
+                moves = generate_knight_moves(board, piece_color, r, c)
+            elif piece_type == PieceType.PAWN:
+                moves = generate_pawn_moves(board, piece_color, r, c)
+            elif piece_type == PieceType.BISHOP:
+                moves = generate_bishop_moves(board, piece_color, r, c)
+            elif piece_type == PieceType.ROOK:
+                moves = generate_rook_moves(board, piece_color, r, c)
+            elif piece_type == PieceType.QUEEN:
+                moves = generate_queen_moves(board, piece_color, r, c)
+            elif piece_type == PieceType.KING:
+                moves = generate_king_moves(board, piece_color, r, c, safe_moves=False)
+            else:
+                continue
+            for move in moves:
+                if move.end == (row, col):
+                    return True
+    return False
+
+
 def generate_knight_moves(
     board: "Chessboard", color: PieceColor, row: int, col: int
 ) -> List[PieceMove]:
@@ -181,7 +213,11 @@ def generate_queen_moves(
 
 
 def generate_king_moves(
-    board: "Chessboard", color: PieceColor, row: int, col: int
+    board: "Chessboard",
+    color: PieceColor,
+    row: int,
+    col: int,
+    safe_moves: bool = True,
 ) -> List[PieceMove]:
     """Return all legal king moves from ``row`` and ``col``."""
     directions = [
@@ -201,15 +237,19 @@ def generate_king_moves(
         if not _is_valid(board, new_row, new_col):
             continue
         piece = board.get_piece(new_row, new_col)
-        if piece is None:
-            moves.append(PieceMove(start=(row, col), end=(new_row, new_col)))
-        elif piece[1] != color:
+        if piece is None or piece[1] != color:
+            if safe_moves:
+                if piece is not None and piece[1] != color:
+                    board.remove_piece(new_row, new_col)
+                    danger = _square_under_attack(board, color, new_row, new_col)
+                    board.place_piece(new_row, new_col, piece[0], piece[1])
+                else:
+                    danger = _square_under_attack(board, color, new_row, new_col)
+                if danger:
+                    continue
+            captures = [] if piece is None else [(new_row, new_col)]
             moves.append(
-                PieceMove(
-                    start=(row, col),
-                    end=(new_row, new_col),
-                    captures=[(new_row, new_col)],
-                )
+                PieceMove(start=(row, col), end=(new_row, new_col), captures=captures)
             )
     return moves
 
