@@ -1,4 +1,4 @@
-"""ASCII chessboard drawing utilities."""
+"""Unicode chessboard drawing utilities."""
 
 from __future__ import annotations
 
