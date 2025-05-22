@@ -85,7 +85,7 @@ def test_draw_empty_board_with_coords() -> None:
         "  ┣━━━╋━━━┫\n"
         "2 ┃   ┃   ┃\n"
         "  ┗━━━┻━━━┛\n"
-        "  1   2\n"
+        "  A   B\n"
     )
     assert draw_empty_board(width=2, height=2, with_coords=True) == expected
 
