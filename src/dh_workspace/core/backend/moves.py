@@ -18,6 +18,10 @@ def _square_under_attack(
     board: "Chessboard", color: PieceColor, row: int, col: int
 ) -> bool:
     """Return ``True`` if ``row`` and ``col`` are threatened by any enemy piece."""
+    original = board.get_piece(row, col)
+    board.remove_piece(row, col)
+    board.place_piece(row, col, PieceType.PAWN, color)
+
     for r in range(board.BOARD_HEIGHT):
         for c in range(board.BOARD_WIDTH):
             piece = board.get_piece(r, c)
@@ -42,7 +46,16 @@ def _square_under_attack(
                 continue
             for move in moves:
                 if move.end == (row, col):
+                    if original is not None:
+                        board.place_piece(row, col, original[0], original[1])
+                    else:
+                        board.remove_piece(row, col)
                     return True
+
+    if original is not None:
+        board.place_piece(row, col, original[0], original[1])
+    else:
+        board.remove_piece(row, col)
     return False
 
 
@@ -77,7 +90,7 @@ def generate_knight_moves(
                 new_col,
             )
             moves.append(PieceMove(start=(row, col), end=(new_row, new_col)))
-        elif piece[1] != color:
+        elif piece[1] != color and piece[0] != PieceType.KING:
             logger.debug(
                 "Knight capture from (%s, %s) to (%s, %s)",
                 row,
@@ -111,7 +124,7 @@ def generate_pawn_moves(
 
         piece = board.get_piece(target_row, new_col)
         if is_capture:
-            if piece is not None and piece[1] != color:
+            if piece is not None and piece[1] != color and piece[0] != PieceType.KING:
                 logger.debug(
                     "Pawn capture from (%s, %s) to (%s, %s)",
                     row,
@@ -158,7 +171,7 @@ def generate_bishop_moves(
             if piece is None:
                 moves.append(PieceMove(start=(row, col), end=(new_row, new_col)))
             else:
-                if piece[1] != color:
+                if piece[1] != color and piece[0] != PieceType.KING:
                     moves.append(
                         PieceMove(
                             start=(row, col),
@@ -190,7 +203,7 @@ def generate_rook_moves(
             if piece is None:
                 moves.append(PieceMove(start=(row, col), end=(new_row, new_col)))
             else:
-                if piece[1] != color:
+                if piece[1] != color and piece[0] != PieceType.KING:
                     moves.append(
                         PieceMove(
                             start=(row, col),
@@ -237,7 +250,7 @@ def generate_king_moves(
         if not _is_valid(board, new_row, new_col):
             continue
         piece = board.get_piece(new_row, new_col)
-        if piece is None or piece[1] != color:
+        if piece is None or (piece[1] != color and piece[0] != PieceType.KING):
             if safe_moves:
                 if piece is not None and piece[1] != color:
                     board.remove_piece(new_row, new_col)

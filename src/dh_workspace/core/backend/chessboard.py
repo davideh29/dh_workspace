@@ -30,6 +30,16 @@ class Chessboard:
             [None for _ in range(self.BOARD_WIDTH)] for _ in range(self.BOARD_HEIGHT)
         ]
 
+    def clone(self) -> "Chessboard":
+        """Return a deep copy of this ``Chessboard``."""
+        new_board = Chessboard()
+        for r in range(self.BOARD_HEIGHT):
+            for c in range(self.BOARD_WIDTH):
+                piece = self._board[r][c]
+                if piece is not None:
+                    new_board._board[r][c] = Piece(piece.piece, piece.color)
+        return new_board
+
     def _validate_position(self, row: int, col: int) -> None:
         """Raise ``ValueError`` if ``row`` or ``col`` is outside the board."""
         if not (0 <= row < self.BOARD_HEIGHT and 0 <= col < self.BOARD_WIDTH):

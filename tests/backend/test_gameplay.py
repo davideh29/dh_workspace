@@ -61,3 +61,24 @@ def test_starting_position_move_counts() -> None:
             piece_obj = piece_classes[piece_type](color, board)
             moves = piece_obj.possible_moves(row, col)
             assert len(moves) == expected_counts[piece_type]
+
+
+def test_piece_cannot_capture_king() -> None:
+    board = Chessboard()
+    board.place_piece(0, 0, PieceType.KING, PieceColor.BLACK)
+    board.place_piece(0, 2, PieceType.ROOK, PieceColor.WHITE)
+    rook = Rook(PieceColor.WHITE, board)
+    moves = rook.possible_moves(0, 2)
+    assert (0, 0) not in {m.end for m in moves}
+
+
+def test_checkmate_ends_match() -> None:
+    board = Chessboard()
+    board.place_piece(0, 0, PieceType.KING, PieceColor.BLACK)
+    board.place_piece(2, 2, PieceType.KING, PieceColor.WHITE)
+    board.place_piece(1, 2, PieceType.QUEEN, PieceColor.WHITE)
+    match = Match(board, num_players=2)
+
+    assert match.attempt_move((1, 2), (1, 1))
+    assert match.is_completed
+    assert not match.attempt_move((0, 0), (0, 1))
