@@ -14,6 +14,7 @@ from .core.backend.pieces import (
     PieceColor,
 )
 from .core.backend.match import Match
+from .core.match_facade import MatchFacade
 from .utils.config import CONFIG, Config, configure
 from .utils.logger import logger
 from .frontend.unicode_board import (
@@ -36,6 +37,7 @@ __all__ = [
     "King",
     "PieceType",
     "Match",
+    "MatchFacade",
     "CONFIG",
     "Config",
     "configure",
