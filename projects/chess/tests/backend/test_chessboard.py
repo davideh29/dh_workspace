@@ -1,6 +1,6 @@
 import pytest
 
-from dh_workspace import Chessboard, PieceColor, PieceType
+from projects.chess import Chessboard, PieceColor, PieceType
 
 
 def test_board_initially_empty():

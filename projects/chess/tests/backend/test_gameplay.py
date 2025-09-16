@@ -1,4 +1,4 @@
-from dh_workspace import (
+from projects.chess import (
     Bishop,
     Chessboard,
     King,
@@ -10,7 +10,7 @@ from dh_workspace import (
     Queen,
     Rook,
 )
-from dh_workspace.core.backend.chessboard import Piece
+from projects.chess.core.backend.chessboard import Piece
 
 
 def test_pawn_capture_sequence() -> None:

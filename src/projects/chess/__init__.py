@@ -1,4 +1,4 @@
-"""dh_workspace package initialization."""
+"""Chess project package initialization."""
 
 from .core.backend.chessboard import Chessboard
 from .core.backend.pieces import (

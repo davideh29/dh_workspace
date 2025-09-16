@@ -5,7 +5,7 @@ from . import Chessboard, Config, configure, logger
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="dh_workspace entry point")
+    parser = argparse.ArgumentParser(description="Chess project entry point")
     parser.add_argument("--board-width", type=int, default=Config().board_width)
     parser.add_argument("--board-height", type=int, default=Config().board_height)
     parser.add_argument("--log-level", default=logging.getLevelName(Config().log_level))

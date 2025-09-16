@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger("dh_workspace")
+logger = logging.getLogger("projects.chess")
 _handler = logging.StreamHandler()
 _formatter = logging.Formatter("[%(levelname)s] %(message)s")
 _handler.setFormatter(_formatter)

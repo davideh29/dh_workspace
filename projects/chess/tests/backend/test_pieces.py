@@ -1,6 +1,6 @@
 import pytest
 
-from dh_workspace import (
+from projects.chess import (
     ChessPiece,
     Chessboard,
     Knight,
