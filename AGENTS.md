@@ -1,5 +1,5 @@
 This repository contains Python source code under `src/projects/` with
-project-specific tests stored in `projects/<name>/tests`.
+project-specific tests stored alongside the code in `src/projects/<name>/tests`.
 
 Rules
 -----
@@ -12,8 +12,8 @@ Rules
   `PieceType` and the `Match` class for game state.
 - Draw boards using `projects.chess.frontend.unicode_board` (`draw_board`,
   `draw_board_inverted`). Store board snapshots for regression tests in
-  `projects/chess/tests/resources/`.
+  `src/projects/chess/tests/resources/`.
 - Configure settings via the global `CONFIG` through `configure()` and log via
   `utils.logger`.
 - Add focused tests for every feature or bug fix in the appropriate
-  `projects/<name>/tests/` directory.
+  `src/projects/<name>/tests/` directory.

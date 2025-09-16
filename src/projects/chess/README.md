@@ -1,7 +1,8 @@
 # Chess prototype
 
 This module contains the chess prototype that previously lived at the root of the
-workspace.
+workspace. The entire project, including tests and documentation, now resides
+under this directory.
 
 ## Layout
 
@@ -9,7 +10,7 @@ workspace.
 - Core game logic: `src/projects/chess/core`
 - Utilities: `src/projects/chess/utils`
 - Front-end helpers: `src/projects/chess/frontend`
-- Tests and fixtures: `projects/chess/tests`
+- Tests and fixtures: `src/projects/chess/tests`
 
 ## Usage
 
