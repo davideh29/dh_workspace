@@ -1,4 +1,4 @@
-from dh_workspace import MatchFacade, PieceType, PieceColor
+from projects.chess import MatchFacade, PieceType, PieceColor
 
 
 def test_facade_initial_state_and_move():

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from dh_workspace import (
+from projects.chess import (
     Chessboard,
     Match,
     CONFIG,
