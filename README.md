@@ -54,3 +54,36 @@ Refer to `src/projects/chess/README.md` for details about this module.
 
 Following this pattern keeps each prototype isolated while allowing them to
 share tooling and dependencies.
+
+## Robotics – Spherical Point Cloud
+
+The `projects/robotics-spherical-pointcloud` directory contains a standalone
+React + Three.js application that renders an interactive spherical point cloud.
+It is configured for deployment via GitHub Pages using Vite's static output in
+`docs/`.
+
+### Local development
+
+```bash
+cd projects/robotics-spherical-pointcloud
+npm install
+npm run dev
+```
+
+### Tests and production build
+
+```bash
+npm run test
+npm run build
+npm run preview
+```
+
+After building, push the contents of the `docs/` directory to make the site
+available at:
+
+```
+https://<USERNAME>.github.io/dh_workspace/projects/robotics-spherical-pointcloud/
+```
+
+Configure the repository's Pages settings to serve from the `main` branch and
+`/projects/robotics-spherical-pointcloud/docs` folder.
