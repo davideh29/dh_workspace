@@ -14,3 +14,8 @@ venv/
 
 # macOS
 .DS_Store
+
+# Node projects
+node_modules/
+projects/**/node_modules/
+projects/**/docs/
