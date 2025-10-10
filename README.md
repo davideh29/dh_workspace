@@ -27,7 +27,8 @@ black .
 ## Repository layout
 
 - `src/projects/`: Python packages for each prototype. Current projects live at
-  `src/projects/chess` and `src/projects/reactive_store`.
+  `src/projects/chess`, `src/projects/linear_algebra`, and
+  `src/projects/reactive_store`.
 - `src/projects/<name>/tests`: Tests and fixtures that live alongside the
   project code.
 - `src/projects/<name>/README.md`: Optional, project-specific documentation.
@@ -44,6 +45,14 @@ implementation, tests, and documentation in a single directory tree. Refer to
 The reactive in-memory store lives at `src/projects/reactive_store`. It offers a
 hierarchical key-value API that emits events to subscribers whenever keys are
 set or deleted. See `src/projects/reactive_store/README.md` for usage guidance.
+
+### Linear algebra project
+
+The linear algebra utilities live at `src/projects/linear_algebra`. It currently
+focuses on 3D rigid-body math and provides the `Transform3d` class for applying,
+composing, and inverting transformations represented by translation vectors and
+quaternions. Explore `src/projects/linear_algebra/README.md` for background and
+examples.
 
 ## Adding a new project
 
