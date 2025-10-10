@@ -40,6 +40,7 @@ class _Subscription:
     callback: Callable[[Event], Awaitable[None] | None | Any]
     match_exact: bool
     prefix: Optional[str]
+    retry_on_error: bool
 
     def matches(self, path: str) -> bool:
         if self.match_exact:
@@ -128,8 +129,12 @@ class ReactiveStore:
         self,
         selector: str,
         callback: Callable[[Event], Awaitable[None] | None | Any],
+        *,
+        retry_on_error: bool = True,
     ) -> SubscriptionId:
-        subscription = self._create_subscription(selector, callback)
+        subscription = self._create_subscription(
+            selector, callback, retry_on_error=retry_on_error
+        )
         subscription_id = str(uuid.uuid4())
         with self._lock:
             self._subscriptions[subscription_id] = subscription
@@ -177,6 +182,8 @@ class ReactiveStore:
         self,
         selector: str,
         callback: Callable[[Event], Awaitable[None] | None | Any],
+        *,
+        retry_on_error: bool,
     ) -> _Subscription:
         if not callable(callback):
             raise TypeError("Callback must be callable")
@@ -186,6 +193,7 @@ class ReactiveStore:
                 callback=callback,
                 match_exact=False,
                 prefix=None,
+                retry_on_error=retry_on_error,
             )
         if selector.endswith(".*"):
             prefix_base = self._validate_selector(selector, allow_wildcard=True)
@@ -194,6 +202,7 @@ class ReactiveStore:
                 callback=callback,
                 match_exact=False,
                 prefix=prefix_base,
+                retry_on_error=retry_on_error,
             )
         normalized = self._validate_selector(selector, allow_wildcard=False)
         return _Subscription(
@@ -201,6 +210,7 @@ class ReactiveStore:
             callback=callback,
             match_exact=True,
             prefix=None,
+            retry_on_error=retry_on_error,
         )
 
     def _build_event(self, event_type: str, path: str, value: Any | None) -> Event:
@@ -257,6 +267,8 @@ class ReactiveStore:
                 "ReactiveStore callback failed",
                 extra={"subscription": subscription.selector, "attempt": attempt},
             )
+            if not subscription.retry_on_error:
+                return
             time.sleep(delay)
             next_delay = min(delay * 2, self._retry_max_delay)
             self._queue.put(
