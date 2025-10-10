@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 from numpy.testing import assert_allclose
 
-from projects.linear_algebra import Transform3d
+from projects.linear_algebra import Transform3d, interpolate_transform
 
 
 def rotation_matrix_x(angle_deg: float) -> np.ndarray:
@@ -98,3 +98,58 @@ def test_translate_and_rotate_helpers() -> None:
     rotated = transform.rotate(quarter_turn)
     expected_matrix = rotation_matrix_y(90.0)
     assert_allclose(rotated.rotation_matrix, expected_matrix, atol=1e-12)
+
+
+def test_interpolate_transform_blends_translation_and_rotation() -> None:
+    start = Transform3d.identity()
+    end = Transform3d.from_translation_rotation(
+        np.array([4.0, -2.0, 0.0]), rotation_matrix_z(90.0)
+    )
+
+    halfway = interpolate_transform(start, end, 0.5)
+
+    assert_allclose(halfway.translation, np.array([2.0, -1.0, 0.0]))
+
+    expected_rotation = rotation_matrix_z(45.0)
+    assert_allclose(halfway.rotation_matrix, expected_rotation, atol=1e-12)
+
+
+def test_interpolate_transform_extremes_match_inputs() -> None:
+    start = Transform3d.from_translation_rotation(
+        np.array([-1.0, 0.5, 2.0]),
+        axis_angle_quaternion(np.array([1.0, 0.0, 0.0]), 30.0),
+    )
+    end = Transform3d.from_translation_rotation(
+        np.array([2.0, -1.5, -2.0]),
+        axis_angle_quaternion(np.array([0.0, 0.0, 1.0]), 120.0),
+    )
+
+    assert_allclose(
+        interpolate_transform(start, end, 0.0).translation, start.translation
+    )
+    assert_allclose(
+        interpolate_transform(start, end, 0.0).rotation_matrix,
+        start.rotation_matrix,
+        atol=1e-12,
+    )
+
+    assert_allclose(interpolate_transform(start, end, 1.0).translation, end.translation)
+    assert_allclose(
+        interpolate_transform(start, end, 1.0).rotation_matrix,
+        end.rotation_matrix,
+        atol=1e-12,
+    )
+
+
+def test_interpolate_transform_rejects_fraction_outside_unit_interval() -> None:
+    start = Transform3d.identity()
+    end = Transform3d.identity()
+
+    with np.testing.assert_raises(ValueError):
+        interpolate_transform(start, end, -0.1)
+
+    with np.testing.assert_raises(ValueError):
+        interpolate_transform(start, end, 1.1)
+
+    with np.testing.assert_raises(TypeError):
+        interpolate_transform(start, end, "0.5")

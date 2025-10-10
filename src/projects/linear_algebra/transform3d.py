@@ -103,6 +103,59 @@ def _coerce_quaternion(rotation: ArrayLike) -> Quaternion:
     raise TypeError("Rotation must be provided as a quaternion or 3x3 rotation matrix.")
 
 
+def interpolate_transform(
+    start: "Transform3d", end: "Transform3d", fraction: float
+) -> "Transform3d":
+    """Return the transform fractionally between ``start`` and ``end``.
+
+    Parameters
+    ----------
+    start
+        The initial transform.
+    end
+        The final transform.
+    fraction
+        Interpolation factor in ``[0, 1]`` where ``0`` returns ``start`` and
+        ``1`` returns ``end``.
+    """
+
+    if not isinstance(fraction, (int, float)):
+        raise TypeError("fraction must be a real number.")
+
+    fraction = float(fraction)
+
+    if not 0.0 <= fraction <= 1.0:
+        raise ValueError("fraction must be within [0, 1].")
+
+    start_translation = start.translation
+    end_translation = end.translation
+    translation = (1.0 - fraction) * start_translation + fraction * end_translation
+
+    start_quaternion = start.quaternion
+    end_quaternion = end.quaternion
+
+    dot = float(np.dot(start_quaternion, end_quaternion))
+    if dot < 0.0:
+        end_quaternion = -end_quaternion
+        dot = -dot
+
+    if dot > 0.9995:
+        interpolated = start_quaternion + fraction * (end_quaternion - start_quaternion)
+        rotation = _normalize_quaternion(interpolated)
+    else:
+        dot = np.clip(dot, -1.0, 1.0)
+        theta_0 = np.arccos(dot)
+        sin_theta_0 = np.sin(theta_0)
+        theta = theta_0 * fraction
+        sin_theta = np.sin(theta)
+        scale_start = np.sin(theta_0 - theta) / sin_theta_0
+        scale_end = sin_theta / sin_theta_0
+        rotation = scale_start * start_quaternion + scale_end * end_quaternion
+        rotation = _normalize_quaternion(rotation)
+
+    return Transform3d(translation=translation, rotation=rotation)
+
+
 class Transform3d:
     """Represents a 3D rigid transform with rotation and translation."""
 
