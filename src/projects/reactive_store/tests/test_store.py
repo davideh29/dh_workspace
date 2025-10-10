@@ -163,6 +163,26 @@ def test_callbacks_are_retried_after_failures() -> None:
         store.shutdown()
 
 
+def test_callback_retries_can_be_disabled_per_subscription() -> None:
+    store = ReactiveStore(retry_base_delay=0.01, retry_max_delay=0.05)
+    attempts: List[int] = []
+    done = threading.Event()
+
+    def callback(event: Event) -> None:
+        attempts.append(event.version)
+        done.set()
+        raise RuntimeError("fail once")
+
+    try:
+        store.subscribe("no.retry", callback, retry_on_error=False)
+        store.set("no.retry", 1)
+        assert done.wait(1.0)
+        time.sleep(0.1)
+        assert len(attempts) == 1
+    finally:
+        store.shutdown()
+
+
 def test_context_manager_shuts_down_worker() -> None:
     with ReactiveStore() as store:
         store.set("ctx.example", True)
