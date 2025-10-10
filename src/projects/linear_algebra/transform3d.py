@@ -224,7 +224,7 @@ class Transform3d:
             return pts @ rot_matrix.T + self._translation
         raise ValueError("Points must be a 3-vector or array with shape (N, 3).")
 
-    def compose(self, other: "Transform3d") -> "Transform3d":
+    def dot(self, other: "Transform3d") -> "Transform3d":
         """Return the transform equivalent to applying ``other`` then ``self``."""
         composed_quaternion = _quaternion_multiply(self._quaternion, other._quaternion)
         composed_translation = (
