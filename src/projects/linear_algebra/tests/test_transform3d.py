@@ -56,7 +56,7 @@ def test_as_matrix_and_from_matrix_roundtrip() -> None:
     assert_allclose(rebuilt.rotation_matrix, rotation, atol=1e-12)
 
 
-def test_compose_matches_matrix_product() -> None:
+def test_dot_matches_matrix_product() -> None:
     base = Transform3d.from_translation_rotation(
         [1.0, 0.0, 0.0], rotation_matrix_z(90.0)
     )
@@ -64,7 +64,7 @@ def test_compose_matches_matrix_product() -> None:
         [0.0, 1.0, 0.0], rotation_matrix_x(45.0)
     )
 
-    composed = base.compose(offset)
+    composed = base.dot(offset)
 
     matrix_product = base.as_matrix() @ offset.as_matrix()
     expected = Transform3d.from_matrix(matrix_product)
@@ -77,7 +77,7 @@ def test_inverse_recovers_identity() -> None:
     quaternion = axis_angle_quaternion(np.array([1.0, 2.0, 3.0]), 67.0)
     transform = Transform3d.from_translation_rotation([-3.0, 2.0, 5.0], quaternion)
 
-    identity = transform.compose(transform.inverse())
+    identity = transform.dot(transform.inverse())
     assert_allclose(identity.translation, np.zeros(3), atol=1e-12)
     assert_allclose(identity.rotation_matrix, np.eye(3), atol=1e-12)
 

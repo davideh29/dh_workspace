@@ -10,7 +10,8 @@ matrix) and translation vectors in a single object.
 - Parse rotations provided as quaternions or 3x3 rotation matrices.
 - Generate homogeneous 4x4 matrices from a transform instance.
 - Apply transforms to single points or batches of 3D points.
-- Compose multiple transforms using quaternion multiplication.
+- Compose multiple transforms using quaternion multiplication with
+  `Transform3d.dot`.
 - Compute inverse transforms for undoing a rigid-body pose.
 
 ## Usage
@@ -33,7 +34,7 @@ rotation = Transform3d.from_translation_rotation(
     translation=[0.0, 0.0, 0.0],
     rotation=[0.0, 0.0, np.sin(np.pi / 4), np.cos(np.pi / 4)],
 )
-combined = rotation.compose(base_pose)
+combined = rotation.dot(base_pose)
 
 # Convert back to a 4x4 homogeneous matrix
 matrix = combined.as_matrix()
