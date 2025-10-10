@@ -26,8 +26,8 @@ black .
 
 ## Repository layout
 
-- `src/projects/`: Python packages for each prototype. The current project is
-  available at `src/projects/chess`.
+- `src/projects/`: Python packages for each prototype. Current projects live at
+  `src/projects/chess` and `src/projects/reactive_store`.
 - `src/projects/<name>/tests`: Tests and fixtures that live alongside the
   project code.
 - `src/projects/<name>/README.md`: Optional, project-specific documentation.
@@ -35,10 +35,15 @@ black .
 
 ### Chess project
 
-The existing chess prototype lives at `src/projects/chess`, which now contains
-the implementation, tests, and documentation in a single directory tree.
+The chess prototype lives at `src/projects/chess`, which now contains the
+implementation, tests, and documentation in a single directory tree. Refer to
+`src/projects/chess/README.md` for details about this module.
 
-Refer to `src/projects/chess/README.md` for details about this module.
+### Reactive store project
+
+The reactive in-memory store lives at `src/projects/reactive_store`. It offers a
+hierarchical key-value API that emits events to subscribers whenever keys are
+set or deleted. See `src/projects/reactive_store/README.md` for usage guidance.
 
 ## Adding a new project
 
